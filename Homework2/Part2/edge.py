@@ -175,27 +175,49 @@ def non_maximum_suppression(G, theta):
 
     #print(G)
     ### BEGIN YOUR CODE
+    # for i in range(H):
+    #     for j in range(W):
+    #         if theta[i, j] == 0 or theta[i, j] == 180:
+    #             a = G[i, j]
+    #             b = G[i, max(0, j-1)]
+    #             c = G[i, min(W-1, j+1)]
+    #             out[i, j] = G[i, j] if G[i, j] == max(a, b, c) else 0
+    #         elif theta[i, j] == 45 or theta[i, j] == 225:
+    #             a = G[i, j]
+    #             b = G[min(H-1, i+1), min(W-1, j+1)]
+    #             c = G[max(0, i-1), max(0, j-1)]
+    #             out[i, j] = G[i, j] if G[i, j] == max(a, b, c) else 0
+    #         elif theta[i, j] == 90 or theta[i, j] == 270:
+    #             a = G[i, j]
+    #             b = G[max(0, i-1), j]
+    #             c = G[min(H-1, i+1), j]
+    #             out[i, j] = G[i, j] if G[i, j] == max(a, b, c) else 0
+    #         elif theta[i, j] == 135 or theta[i, j] == 315:
+    #             a = G[i, j]
+    #             b = G[max(0, i-1), min(W-1, j+1)]
+    #             c = G[min(H-1, i+1), max(0, j-1)]
+    #             out[i, j] = G[i, j] if G[i, j] == max(a, b, c) else 0
     for i in range(H):
         for j in range(W):
             if theta[i, j] == 0 or theta[i, j] == 180:
                 a = G[i, j]
-                b = G[i, max(0, j-1)]
-                c = G[i, min(W-1, j+1)]
+                b = G[i, j - 1] if j > 0 else 0
+                c = G[i, j + 1] if j < W - 1 else 0
                 out[i, j] = G[i, j] if G[i, j] == max(a, b, c) else 0
             elif theta[i, j] == 45 or theta[i, j] == 225:
                 a = G[i, j]
-                b = G[min(H-1, i+1), min(W-1, j+1)]
-                c = G[max(0, i-1), max(0, j-1)]
+                b = G[i + 1, j + 1] if i < H - 1 and j < W - 1 else 0
+                c = G[i - 1, j - 1] if i > 0 and j > 0 else 0
                 out[i, j] = G[i, j] if G[i, j] == max(a, b, c) else 0
             elif theta[i, j] == 90 or theta[i, j] == 270:
                 a = G[i, j]
-                b = G[max(0, i-1), j]
-                c = G[min(H-1, i+1), j]
+                b = G[i - 1, j] if i > 0 else 0
+                c = G[i + 1, j] if i < H - 1 else 0
                 out[i, j] = G[i, j] if G[i, j] == max(a, b, c) else 0
             elif theta[i, j] == 135 or theta[i, j] == 315:
                 a = G[i, j]
-                b = G[max(0, i-1), min(W-1, j+1)]
-                c = G[min(H-1, i+1), max(0, j-1)]
+                b = G[i - 1, j + 1] if i > 0 and j < W - 1 else 0
+                c = G[i + 1, j - 1] if i < H - 1 and j > 0 else 0
                 out[i, j] = G[i, j] if G[i, j] == max(a, b, c) else 0
     ### END YOUR CODE
 
@@ -256,7 +278,10 @@ def get_neighbors(y, x, H, W):
 
     return neighbors
 
+
 from queue import Queue
+
+
 def link_edges(strong_edges, weak_edges):
     """ Find weak edges connected to strong edges and link them.
 
